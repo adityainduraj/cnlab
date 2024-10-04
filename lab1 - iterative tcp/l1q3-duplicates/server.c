@@ -8,33 +8,21 @@
 #define BUF_SIZE 1024
 
 // Function to remove duplicate words from the sentence
-void remove_duplicates(char *str) {
-    char *words[BUF_SIZE];
-    int word_count = 0;
-    char *token = strtok(str, " ");
-    
-    // Tokenize and store words
-    while (token != NULL) {
-        int is_duplicate = 0;
-        for (int i = 0; i < word_count; i++) {
-            if (strcmp(words[i], token) == 0) {
-                is_duplicate = 1;  // Mark as duplicate
-                break;
-            }
+void remove_duplicates(char *sentence) {
+    char *word = strtok(sentence, " \n"); // Get the first word
+    char result[1024] = ""; // To store the result sentence
+
+    // Process each word
+    while (word != NULL) {
+        if (!strstr(result, word)) { // If the word is not already in the result
+            strcat(result, word); // Add it
+            strcat(result, " ");  // Add space after the word
         }
-        if (!is_duplicate) {
-            words[word_count++] = token;  // Retain non-duplicate word
-        }
-        token = strtok(NULL, " ");
+        word = strtok(NULL, " \n"); // Get the next word
     }
 
-    // Rebuild the sentence without duplicates
-    str[0] = '\0';  // Clear original string
-    for (int i = 0; i < word_count; i++) {
-        strcat(str, words[i]);
-        if (i < word_count - 1) strcat(str, " ");  // Add spaces between words
-    }
-}
+    strcpy(sentence, result); // Copy the result back to the original sentence
+} 
 
 int main() {
     int server_fd, client_fd;
